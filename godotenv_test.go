@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime"
 	"testing"
 )
 
@@ -207,12 +208,15 @@ func TestSubstituitions(t *testing.T) {
 }
 
 func TestEmbedCmd(t *testing.T) {
-	envFileName := "fixtures/embed_cmd.env"
-	expectedValues := map[string]string{
-		"OPTION_A": "123",
-	}
+	// NOT works on windows
+	if runtime.GOOS != "windows" {
+		envFileName := "fixtures/embed_cmd.env"
+		expectedValues := map[string]string{
+			"OPTION_A": "123",
+		}
 
-	loadEnvAndCompareValues(t, Load, envFileName, expectedValues, noopPresets)
+		loadEnvAndCompareValues(t, Load, envFileName, expectedValues, noopPresets)
+	}
 }
 
 func TestActualEnvVarsAreLeftAlone(t *testing.T) {
